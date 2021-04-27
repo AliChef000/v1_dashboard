@@ -131,7 +131,7 @@
       var query = new widgets.query(`
       query ($dateFormat: String!)  
       {ethereum(network:bsc){
-  dexTrades(date:{since:"2020-09-24"}){
+  dexTrades(date:{since:"2020-09-24",till:"2021-04-20"}){
   Pancake:count(uniq:senders,exchangeName:{is:"Pancake"})
   Others:count(uniq:senders,exchangeName:{not:"Pancake"})
     date:date{dt:date(format:$dateFormat)}
@@ -203,7 +203,7 @@
     query($dateFormat:String!)
 {ethereum(network:bsc){
   smartContractCalls(
-    date:{since:"2020-12-01"},
+    date:{since:"2020-12-01",till:"2021-04-20"},
   )
   {
 date:date{dt:date(format:$dateFormat)}
@@ -279,7 +279,7 @@ date:date{dt:date(format:$dateFormat)}
 query($dateFormat:String!)
 {ethereum(network:bsc){
   dexTrades(exchangeName:{is:"Pancake"}
-  date:{since:"2020-12-01"}){
+  date:{since:"2020-12-01",till:"2021-04-20"}){
     date:date{date(format:$dateFormat)}
     tradeAmount(in:USD)
   }
@@ -328,7 +328,7 @@ query($dateFormat:String!)
     smartContractEvents(
       smartContractAddress: {in: $address}
       smartContractEvent: {in: ["Mint","Burn"]}
-      date:{since:"2020-11-01"}
+      date:{since:"2020-11-01",till:"2021-04-20"}
     ) {
       date:date{date(format:$dateFormat)}
  Mint:count(uniq: callers,smartContractEvent:{is:"Mint"})
