@@ -97,7 +97,7 @@
       <div class="row" style="margin-top:20px; margin-bottom:20px">
         <div class="col-md-12">
           <div class="d-flex justify-content-center" style="font-weight: bold;">
-           V2 Top 50 Pairs (3/27-4/26)
+           V1 Top 50 Pairs (3/27-4/26)
           </div>
           <div id="top_pairs"></div>
         </div>
@@ -269,7 +269,7 @@ date:date{dt:date(format:$dateFormat)}
     query.request({dateFormat:
                   "%Y-%m-%d"});
     })();
-	</script>
+</script>
   <script>
      (function(){
     widgets.init('https://graphql.bitquery.io', '', {locale: 'en', theme: 'light'});
@@ -331,7 +331,7 @@ query($dateFormat:String!)
       date:{since:"2020-11-01"}
     ) {
       date:date{date(format:$dateFormat)}
-   Mint:count(uniq: callers,smartContractEvent:{is:"Mint"})
+ Mint:count(uniq: callers,smartContractEvent:{is:"Mint"})
  Burn:count(uniq: callers,smartContractEvent:{is:"Burn"})
       
     }
@@ -342,8 +342,7 @@ query($dateFormat:String!)
 
 `);
       var wdts = new widgets.chartByTime(
-        "#lp_liquidity_activity",
-        query,
+        "#lp_liquidity_activity",query,
         "ethereum.smartContractEvents",
         {
           title: "V1 LP Pool Liquidity Activity",
@@ -513,7 +512,7 @@ query($dateFormat:String!)
 "0x6Ff75C20656A0E4745E7c114972D361F483AFa5f",
 "0x484c60f6202c8043DCA0236bB3101ada7ec50AD4",
 "0x56bc8de6e90a8454cb2614b33e750d960aecdf12",
-"0x718d3baa161e1a38758bb0f1fe751e401f431ac4"]
+"0x718d3baa161e1a38758bb0f1fe751e401f431ac4"],
 dateFormat:"%Y-%m-%d"
       });
     })();
