@@ -1,1 +1,658 @@
-<h>Hello!</h>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pancake V1 Analytics Dashboard</title>
+    <link
+      rel="stylesheet"
+      media="all"
+      href="https://cdn.jsdelivr.net/gh/bitquery/widgets@v1.3.8/dist/assets/css/widgets.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/gh/bitquery/widgets@v1.3.8/dist/widgets.js"
+	    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.19.1"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"
+    ></script>  
+    <script src="https://cdn.jsdelivr.net/npm/@bitquery/ide-charts@2.0.1/dist/timeChartRenderer.js"
+	    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+<script 
+    src="https://cdn.jsdelivr.net/npm/@bitquery/ide-charts@2.0.1/dist/timeChartRenderer.js"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+	    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+	    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <style></style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row" style="margin-top:20px; margin-bottom:20px">
+        <div class="col">
+          <div class="d-flex justify-content-center"  style="color: #E67E22;font-size: x-large; font-weight: bold;" >
+              Pancake V1 Analytics Dashboard 
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:20px; margin-bottom:20px">
+        <div class="col-md-12">
+          <div class="d-flex justify-content-center" style="font-weight: bold;">
+            Daily Active Address 
+          </div>
+          <div id="active_address_by_time"></div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:20px; margin-bottom:20px">
+	      <div class="col-md-6">
+          <div class="d-flex justify-content-center" style="font-weight: bold;">
+		        Daily Transactions
+	        </div>  
+	        <div id="trans_count_by_time"></div>
+	      </div>
+      </div>
+        <div class="col-md-6">
+          <div class="d-flex justify-content-center" style="font-weight: bold;">
+            Daily Trading Volume
+          </div>
+          <div id="volume_by_time"></div>
+        </div>
+      <div class="row" style="margin-top:20px; margin-bottom:20px">
+        <div class="col-md-6">
+          <div class="d-flex justify-content-center" style="font-weight: bold;">
+            V1 Daily LP Pool Liquidity Activity
+          </div>
+          <div id="lp_liquidity_activity"></div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:20px; margin-bottom:20px">
+        <div class="col-md-12">
+          <div class="d-flex justify-content-center" style="font-weight: bold;">
+           V1 Top 50 Tokens (3/27-4/26)
+          </div>
+          <div id="top_tokens"></div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:20px; margin-bottom:20px">
+        <div class="col-md-12">
+          <div class="d-flex justify-content-center" style="font-weight: bold;">
+           V2 Top 50 Pairs (3/27-4/26)
+          </div>
+          <div id="top_pairs"></div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:30px; margin-bottom:30px">
+        <div class="col">
+          <div class="d-flex justify-content-end">
+            <a href="https://explorer.bitquery.io/bsc/smart_contract/0xbcfccbde45ce874adcb698cc183debcf17952812">
+              <img
+                src="https://lh3.googleusercontent.com/gLUJmZaNklu79UkRHR5oHP5eOP6NiRBXoP7mk36LHul-41QqZuh2NVYV_sSN6JLczaPmLO5ZVqZPNFMtPw4JhVR78ctqmJGADPyOlp8pG6r_4J1c4UbQ0aQcA2zneUikWJ3kThGX"
+                style="height: 30px;"
+            /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav>
+      <a href="https://alichef000.github.io">Main Page</a> |
+      <a href="https://alichef000.github.io/Top_50">Top Tradings</a> |
+      <a href="https://alichef000.github.io/competitor/">Competitors</a> |
+      <a href="https://alichef000.github.io/v1_dashboard/">V1 Data</a> |
+      </nav>
+  </body>
+
+  <script>
+    (function() {
+      widgets.init("https://graphql.bitquery.io", "", {
+        locale: "en",
+        theme: "light",
+      });
+      var query = new widgets.query(`
+      query ($dateFormat: String!)  
+      {ethereum(network:bsc){
+  dexTrades(date:{since:"2020-09-24"}){
+  Pancake:count(uniq:senders,exchangeName:{is:"Pancake"})
+  Others:count(uniq:senders,exchangeName:{not:"Pancake"})
+    date:date{dt:date(format:$dateFormat)}
+   gasValue
+  
+  }
+}}`);
+      var wdts = new widgets.chartByTime(
+        "#active_address_by_time",
+        query,
+        "ethereum.dexTrades",
+        {
+          title: "Dynamic Active Address",
+          chartOptions: {
+            vAxes: {
+              "0": {
+                title: "Daily Active Address",
+                scaleType:"linear"
+              },
+            },
+            series: {
+              "0": {
+                color: "#ffc107",
+                lineWidth:2,
+                pointsVisible:false,
+                pointShape:"round",
+                pointSize:3
+              },
+              "1":{
+                color:"#28a745",
+                lineWidth:2,
+                pointsVisible:false,
+                pointSize:"round",
+                pointSize:3
+              }
+            },
+            seriesType: "lines",
+          },
+          dataOptions: [
+          {
+              title: {
+                label: "Date",
+                type: "date",
+              },
+              path: "date.dt",
+            },
+            {
+              title: "Pancake V1",
+              path: "Pancake"
+            },
+            {
+              title: "Others",
+              path: "Others"
+            },
+          ],
+        }
+      );
+      query.request({
+        dateFormat:"%Y-%m-%d"
+      });
+    })();
+  </script>
+<script>
+ (function(){
+    widgets.init('https://graphql.bitquery.io', '', {locale: 'en', theme: 'light'});
+    var query = new widgets.query(`
+
+
+    query($dateFormat:String!)
+{ethereum(network:bsc){
+  smartContractCalls(
+    date:{since:"2020-12-01"},
+  )
+  {
+date:date{dt:date(format:$dateFormat)}
+  Pancake: count(uniq:txs,smartContractAddress:{is:"0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F"})
+  caller:count(uniq:callers,smartContractAddress:{is:"0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F"})
+    }
+  }}
+
+`);
+    var wdts = new widgets.chartByTime('#trans_count_by_time', query, 'ethereum.smartContractCalls', {
+ "title": "Transactions",
+ "chartOptions": {
+  "vAxes": {
+   "0": {
+    "title": "Pancake V1 Transactions",
+    "scaleType": "linear"
+   },
+   "1": {
+    "title": "Callers",
+    "scaleType": "linear"
+   },
+  },
+  "series": {
+   "0": {
+    "color": "#ffc107",
+    "barWidth":"2",
+    "pointsVisible":true,
+    "pointShape":"round",
+    "pointSize":"3",
+    "targetAxisIndex": 0,
+    "type":"line"
+   },
+   "1": {
+    "color": "#28a745",
+    "lineWidth":"2",
+    "pointsVisible":false,
+    "pointShape":"diamond",
+    "pointSize":"3",
+    targetAxisIndex: 1,
+    "type":"area"
+   },
+  },
+  "seriesType": "line"
+ },
+ "dataOptions": [
+  {
+    title: {label: "Date",
+                type: "date",
+              },
+              path: "date.dt",
+            },
+  
+  {
+   "title": "Pancake V1 Transactions",
+   "path": "Pancake",
+  },
+  {
+   "title": "Daily Callers",
+   "path": "caller"
+  },
+ ]
+});
+    query.request({dateFormat:
+                  "%Y-%m-%d"});
+    })();
+	</script>
+  <script>
+     (function(){
+    widgets.init('https://graphql.bitquery.io', '', {locale: 'en', theme: 'light'});
+    var query = new widgets.query(`
+
+
+query($dateFormat:String!)
+{ethereum(network:bsc){
+  dexTrades(exchangeName:{is:"Pancake"}
+  date:{since:"2020-12-01"}){
+    date:date{date(format:$dateFormat)}
+    tradeAmount(in:USD)
+  }
+}}
+
+`);
+    var wdts = new widgets.chartByTime('#volume_by_time', query, 'ethereum.dexTrades', {
+ "title": "Transactions",
+ "chartOptions": {
+  "vAxes": {
+   "0": {
+    "title": "Trade Volume USD",
+    "scaleType": "linear"
+   },
+  },
+  "seriesType": "area"
+ },
+ "dataOptions": [
+ {
+              title: 
+              {label:"Date",
+                type: "date"},
+              path: "date.date",
+            },
+  {
+   "title": "Trade Volume",
+   "path": "tradeAmount"
+  }
+ 
+ ]
+});
+    query.request({dateFormat:"%Y-%m-%d"
+  });
+    })();
+  </script>
+  <script>
+    (function() {
+      widgets.init("https://graphql.bitquery.io", "", {
+        locale: "en",
+        theme: "light",
+      });
+      var query = new widgets.query(`
+      query ($address: [String!],
+      $dateFormat: String!) {
+  ethereum(network: bsc) {
+    smartContractEvents(
+      smartContractAddress: {in: $address}
+      smartContractEvent: {in: ["Mint","Burn"]}
+      date:{since:"2020-11-01"}
+    ) {
+      date:date{date(format:$dateFormat)}
+   Mint:count(uniq: callers,smartContractEvent:{is:"Mint"})
+ Burn:count(uniq: callers,smartContractEvent:{is:"Burn"})
+      
+    }
+  }
+}
+
+
+
+`);
+      var wdts = new widgets.chartByTime(
+        "#lp_liquidity_activity",
+        query,
+        "ethereum.smartContractEvents",
+        {
+          title: "V1 LP Pool Liquidity Activity",
+          chartOptions: {
+            vAxes: {
+              "0": {
+                title: "Uniq Address",
+              },
+            },
+            series: {
+              "0": {
+                color: "#ffc107",
+              },
+              "1":{
+                color:"28a745",
+              }
+            },
+            seriesType: "area"
+          },
+          dataOptions: [
+          {
+              title: {
+                label: "Date",
+                type: "date",
+              },
+              path: "date.date",
+            },
+            {
+              title: "Liquidity Adder",
+              path: "Mint"
+            },
+            {
+              title: "Liquidity Remover",
+              path: "Burn"
+            },
+          ],
+        }
+      );
+      query.request({
+        address:[
+"0x73feaa1eE314F8c655E354234017bE2193C9E24E", //LP farming pool
+"0xA527a61703D82139F8a06Bc30097cC9CAA2df5A6",
+"0x1b96b92314c44b159149f7e0303511fb2fc4774f",
+"0xba51d1ab95756ca4eab8737ecd450cd8f05384cf",
+"0xc639187ef82271d8f517de6feae4faf5b517533c",
+"0xbcd62661a6b1ded703585d3af7d7649ef4dcdb5c",
+"0x981d2ba1b298888408d342c39c2ab92e8991691e",
+"0xaebe45e3a03b734c68e5557ae04bfc76917b4686",
+"0xc2eed0f5a0dc28cfa895084bc0a9b8b8279ae492",
+"0xd937FB9E6e47F3805981453BFB277a49FFfE04D7",
+"0x3Da30727ed0626b78C212e81B37B97A8eF8A25bB",
+"0xc15fa3E22c912A276550F3E5FE3b0Deb87B55aCd",
+"0x610e7a287c27dfFcaC0F0a94f547Cc1B770cF483",
+"0x41182c32F854dd97bA0e0B1816022e0aCB2fc0bb",
+"0x70D8929d04b60Af4fb9B58713eBcf18765aDE422",
+"0x7561EEe90e24F3b348E1087A005F78B4c8453524",
+"0x4e0f3385d932F7179DeE045369286FFa6B03d887",
+"0x20bcc3b8a0091ddac2d0bc30f68e6cbb97de59cd",
+"0xc7b4b32a3be2cb6572a1c9959401f832ce47a6d2",
+"0x2333c77fc0b2875c11409cdcd3c75d42d402e834",
+"0x574a978c2d0d36d707a05e459466c7a1054f1210",
+"0x56c77d59e82f33c712f919d09fceddf49660a829",
+"0x5acac332f0f49c8badc7afd0134ad19d3db972e6",
+"0x54edd846db17f43b6e43296134ecd96284671e81",
+"0x68Ff2ca47D27db5Ac0b5c46587645835dD51D3C1",
+"0x4269e7F43A63CEA1aD7707Be565a94a9189967E9",
+"0x35fe9787f0ebf2a200bac413d3030cf62d312774",
+"0x7a34bd64d18e44CfdE3ef4B81b87BAf3EB3315B6",
+"0x30479874f9320a62bce3bc0e315c920e1d73e278",
+"0x752E713fB70E3FA1Ac08bCF34485F14A986956c4",
+"0x7793870484647a7278907498ec504879d6971EAb",
+"0x7cd05f8b960ba071fdf69c750c0e5a57c8366500",
+"0x745c4fd226e169d6da959283275a8e0ecdd7f312",
+"0x2730bf486d658838464a4ef077880998d944252d",
+"0x9f40e8a2fcaa267a0c374b6c661e0b372264cc3d",
+"0x970858016C963b780E06f7DCfdEf8e809919BcE8",
+"0xbEA35584b9a88107102ABEf0BDeE2c4FaE5D8c31",
+"0xC743Dc05F03D25E1aF8eC5F8228f4BD25513c8d0",
+"0xff17ff314925dff772b71abdff2782bc913b3575",
+"0x9c4f6a5050cf863e67a402e8b377973b4e3372c1",
+"0x51a2ffa5b7de506f9a22549e48b33f6cf0d9030e",
+"0x470bc451810b312bbb1256f96b0895d95ea659b1",
+"0x58B58cab6C5cF158f63A2390b817710826d116D0",
+"0x64373608f2e93ea97ad4d8ca2cce6b2575db2f55",
+"0xd6b900d5308356317299dafe303e661271aa12f1",
+"0xd5b3ebf1a85d32c73a82b40f75e1cd929caf4029",
+"0xbe14f3a89a4f7f279af9d99554cf12e8c29db921",
+"0x01ecc44ddd2d104f44d2aa1a2bd9dfbc91ae8275",
+"0x20781bc3701c5309ac75291f5d09bdc23d7b7fa8",
+"0x3aB77e40340AB084c3e23Be8e5A6f7afed9D41DC",
+"0x680dd100e4b394bda26a59dd5c119a391e747d18",
+"0xbc765fd113c5bdb2ebc25f711191b56bb8690aec",
+"0x91589786D36fEe5B27A5539CfE638a5fc9834665",
+"0x6411310c07d8c48730172146fd6f31fa84034a8b",
+"0x36b7d2e5c7877392fb17f9219efad56f3d794700",
+"0xffb9e2d5ce4378f1a89b29bf53f80804cc078102",
+"0xD5664D2d15cdffD597515f1c0D945c6c1D3Bf85B",
+"0xF609ade3846981825776068a8eD7746470029D1f",
+"0x852A68181f789AE6d1Da3dF101740a59A071004f",
+"0xc92Dc34665c8a21f98E1E38474580b61b4f3e1b9",
+"0xD1F12370b2ba1C79838337648F820a87eDF5e1e6",
+"0x3ef4952c7a9afbe374ea02d1bf5ed5a0015b7716",
+"0x74690f829fec83ea424ee1f1654041b2491a7be9",
+"0x66b9e1eac8a81f3752f7f3a5e95de460688a17ee",
+"0x60bB03D1010b99CEAdD0dd209b64bC8bd83da161",
+"0xeb325a8ea1c5abf40c7ceaf645596c1f943d0948",
+"0x99d865ed50d2c32c1493896810fa386c1ce81d91",
+"0xcbe2cf3bd012e9c1ade2ee4d41db3dac763e78f3",
+"0x0392957571f28037607c14832d16f8b653edd472",
+"0xc1800c29cf91954357cd0bf3f0accaada3d0109c",
+"0xb5ab3996808c7e489dcdc0f1af2ab212ae0059af",
+"0x5E3CD27F36932Bc0314aC4e2510585798C34a2fC",
+"0x4576C456AF93a37a096235e5d83f812AC9aeD027",
+"0x9e642d174b14faea31d842dc83037c42b53236e6",
+"0x17580340f3daedae871a8c21d15911742ec79e0f",
+"0x9d8b7e4a9d53654d82f12c83448d8f92732bc761",
+"0x86e650350c40a5178a5d014ba37fe8556232b898",
+"0x36b8b28d37f93372188f2aa2507b68a5cd8b2664",
+"0x4D5aA94Ce6BbB1BC4eb73207a5a5d4D052cFcD67",
+"0x292ca56ed5b3330a19037f835af4a9c0098ea6fa",
+"0xdc6c130299e53acd2cc2d291fa10552ca2198a6b",
+"0x4db28767d1527ba545ca5bbda1c96a94ed6ff242",
+"0xAB97952a2806D5c92b7046c7aB13a72A87e0097b",
+"0x69ab367bc1bea1d2c0fb4dbaec6b7197951da56c",
+"0x45a9e8d48bc560416008d122c9437927fed50e7d",
+"0xbF36959939982D0D34B37Fb3f3425da9676C13a3",
+"0x83B92D283cd279fF2e057BD86a95BdEfffED6faa",
+"0xad7e515409e5a7d516411a85acc88c5e993f570a",
+"0xCA01F5D89d5b1d24ca5D6Ecc856D21e8a61DAFCc",
+"0x0F556f4E47513d1a19Be456a9aF778d7e1A226B9",
+"0xfEc200A5E3adDD4a7915a556DDe3F5850e644020",
+"0xe022baa3E5E87658f789c9132B10d7425Fd3a389",
+"0x7Bb89460599Dbf32ee3Aa50798BBcEae2A5F7f6a",
+"0x7b1e440240B220244761C9D9A3B07fbA1995BD84",
+"0xD20E0BcCa8B29409bf5726CB24DD779Fe337020e",
+"0xd132D2C24F29EE8ABb64a66559d1b7aa627Bd7fD",
+"0xB7918560273FD56e50E9c215CC0DFE8D764C36C5",
+"0x2562f94E90dE6D9eb4fB6B3b8Eab56b15Aa4FC72",
+"0xf64a269F0A06dA07D23F43c1Deb217101ee6Bee7",
+"0x85644fcd00c401e1a0a0a10d2ae6bbe04a73e4ab",
+"0xE1E33459505bB3763843a426F7Fd9933418184ae",
+"0x10F461CEAC7A17F59e249954Db0784d42EfF5DB5",
+"0x889e81d25bffba437b2a5d3e0e4fc58a0e2749c5",
+"0xc746337b5f800a0e19ed4eb3bda03ff1401b8167",
+"0xcd14855150335AAE984aa6D281E090c27035C692",
+"0x8c5cFfad6cddb96Ee33DA685D0d50a37e030E115",
+"0x8FbCbD7e30b1733965a8980bf7Ae2ca1c0C456cc",
+"0xb5f6f7dad23132d40d778085d795bd0fd4b859cd",
+"0x155645cDF8e4B28d5B7790b65d9f79efc222740C",
+"0x17F0b998B81cE75074a7CDAdAe6D63Da3cb23572",
+"0x5a805994a2e30ac710e7376ccc0211285bd4dd92",
+"0xbd1ec00b0d1cca9d5b28fbe0bb7d664238af2ffa",
+"0x61376b56ff33c618b115131712a4138f98810a6a",
+"0x3c9e55edbd937ae0ad8c084a1a8302110612a371",
+"0xE5783Cc9dFb3E7e474B81B07369a008e80F1cEdb",
+"0x496a8b716A3A3410B16e71E3c906968CE4488e52",
+"0x67581bfb4fc13bb73c71489b504e9b5354769063",
+"0xCdC53345192D0e31eEAD03D7E9e008Ee659FAEbE",
+"0xfb29fca952b478ddcb8a43f57176161e498225b1",
+"0xf9045866e7b372def1eff3712ce55fac1a98daf0",
+"0x890479844484D67e34B99e1BBc1468231b254c08",
+"0x34e821e785A93261B697eBD2797988B3AA78ca33",
+"0x044e9985c14a547d478b1e3d4a4e562e69c8f936",
+"0x837cd42282801e340f1f17aadf3166fee99fb07c",
+"0xee4ca18e91012bf87fefde3dd6723a8834347a4d",
+"0x9e6f9f3382f9edc683203b528222c554c92382c2",
+"0x6Ff75C20656A0E4745E7c114972D361F483AFa5f",
+"0x484c60f6202c8043DCA0236bB3101ada7ec50AD4",
+"0x56bc8de6e90a8454cb2614b33e750d960aecdf12",
+"0x718d3baa161e1a38758bb0f1fe751e401f431ac4"]
+dateFormat:"%Y-%m-%d"
+      });
+    })();
+  </script>
+   <script>
+      (function() {
+   widgets.init('https://graphql.bitquery.io', '', {
+     locale: 'en',
+     theme: 'light'
+   });
+   var query = new widgets.query(`
+query($from:ISO8601DateTime,
+$till:ISO8601DateTime)
+{
+  ethereum(network: bsc) {
+    dexTrades(options:{desc:"Total_USD",limit:50}
+      exchangeName: {is: "Pancake"}
+    date:{since:$from,till:$till}) {
+      Total_USD: tradeAmount(calculate: sum, in: USD)
+      Total_amt:baseAmount(calculate:sum)
+    	baseCurrency{symbol
+      address}
+    }
+  }
+}
+`);
+    var wdts = new widgets.table('#top_tokens', query, 'ethereum.dexTrades', {
+ "title": "Top 50",
+ "dataOptions": [
+  {
+   "title": "Token",
+   "type": "string",
+   "path": "baseCurrency.symbol",
+    "style": "width: 100px",
+  },
+  {
+   "title": "Token Address",
+   "type": "string-ellipsis",
+   "path": "baseCurrency.address",
+    "style": "width: 400px"
+  },
+  {
+   "title": "Trade USD",
+   "type": "amount",
+   "path": "Total_USD",
+    "style": "width: 200px",
+  },
+  {
+   "title": "Trade Amt",
+   "type": "amount",
+   "path": "Total_amt",
+  }
+ ]
+});
+    query.request({"from": "2021-03-27", "till": "2021-04-26"});
+    })();
+  </script>
+  <script>
+      (function(){
+    widgets.init('https://graphql.bitquery.io', 'BQY8IPItkNCP0iK8BqvmhSWV1pxpFqrB', {locale: 'en', theme: 'light'});
+    var query = new widgets.query(`
+query ($from: ISO8601DateTime, $till: ISO8601DateTime, $base: [String!], $quote: [String!]) {
+  ethereum(network: bsc) {
+    dexTrades(
+      exchangeName: {is: "Pancake"}
+      options: {limit: 50, desc: "Total_USD"}
+      date: {since: $from, till: $till}
+      quoteCurrency: {in: $quote}
+      baseCurrency: {notIn: $base}
+    ) {
+      Total_USD: tradeAmount(calculate: sum, in: USD)
+      Base_Amount: baseAmount(calculate: sum)
+      count(uniq: senders)
+      baseCurrency {
+        address
+        base: symbol
+      }
+      quoteCurrency {
+        address
+        quote: symbol
+      }
+    }
+  }
+}
+
+`);
+    var wdts = new widgets.table('#top_pairs', query, 'ethereum.dexTrades', {
+ "title": "Top Trading Pairs",
+ "dataOptions": [
+  {
+   "title": "Base",
+   "type": "string-ellipsis",
+    "style": "width: 110px;",
+   "path": [
+    "baseCurrency.base",
+   ],
+  },
+  {
+   "title": "Quote",
+   "type": "string-ellipsis",
+   "style": "width: 110px;",
+   "path": [
+    "quoteCurrency.quote",
+   ],
+   "urlCallbackName": "smart_contract_path"
+  },
+  {
+   "title": "Active Address",
+   "path": "count",
+   "style": "width: 110px;",
+  },
+  {
+   "title": "Trade USD",
+   "type": "amount",
+   "path": "Total_USD",
+   "style": "width: 110px;"
+  },
+  {
+   "title": "Trade Amt (Base)",
+   "type": "amount",
+   "path": "Base_Amount",
+   "style": "width: 110px;"
+  }
+ ]
+});
+    query.request({
+    "from": "2021-03-27",
+  "till": "2021-04-26",
+  "base":["0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+        "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+        "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+        "0x23396cf899ca06c4472205fc903bdb4de249d6fc"],
+  "quote":["0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c", 
+          "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+        "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+        "0x23396cf899ca06c4472205fc903bdb4de249d6fc"]
+    });
+    })()
+    </script>
+ 
+</html>
+
